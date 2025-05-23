@@ -1,15 +1,15 @@
-const path = require(`path`)
-const { createFilePath } = require(`gatsby-source-filesystem`)
+const path = require('path')
+const { createFilePath } = require('gatsby-source-filesystem')
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
 
-  if (node.internal.type === `Mdx`) {
+  if (node.internal.type === 'Mdx') {
     const value = createFilePath({ node, getNode })
     createNodeField({
-      name: `slug`,
+      name: 'slug',
       node,
-      value: `/posts${value}`,
+      value: `/posts${value}`,  // Keep this template literal as it uses interpolation
     })
   }
 }
@@ -17,7 +17,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 exports.createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions
 
-  const blogPost = path.resolve(`./src/templates/blog-post.js`)
+  const blogPost = path.resolve('./src/templates/blog-post.tsx')
 
   const result = await graphql(`
     query {
@@ -35,11 +35,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
     }
   `)
 
+
   if (result.errors) {
-    reporter.panicOnBuild(
-      `There was an error loading your blog posts`,
-      result.errors
-    )
+    reporter.panicOnBuild('There was an error loading your blog posts', result.errors)
     return
   }
 
