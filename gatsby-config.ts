@@ -2,8 +2,8 @@ import type { GatsbyConfig } from "gatsby";
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: `Epidote.top`,
-    siteUrl: `https://www.yourdomain.tld`
+    title: 'Epidote.top',
+    siteUrl: 'https://www.yourdomain.tld'
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin
@@ -23,7 +23,19 @@ const config: GatsbyConfig = {
       "path": "./src/pages/"
     },
     __key: "pages"
-  }]
+  },
+  {
+    resolve: 'gatsby-plugin-google-gtag',
+    options: {
+      trackingIds: [
+        "GA-TRACKING_ID", // Replace with your actual Google Analytics tracking ID
+      ],
+      pluginConfig: {
+        head: true,
+      },
+    },
+  }
+]
 };
 
 export default config;
