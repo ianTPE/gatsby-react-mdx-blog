@@ -68,11 +68,13 @@ try {
 interface BlogPostTemplateProps {
   data: {
     mdx: {
-      frontmatter: {
+      fields: {
         title: string
         date: string
         description?: string
         tags?: string[]
+        author?: string
+        featured?: boolean
       }
       tableOfContents?: {
         items?: Array<{
@@ -84,16 +86,12 @@ interface BlogPostTemplateProps {
     previous?: {
       fields: {
         slug: string
-      }
-      frontmatter: {
         title: string
       }
     }
     next?: {
       fields: {
         slug: string
-      }
-      frontmatter: {
         title: string
       }
     }
@@ -103,7 +101,7 @@ interface BlogPostTemplateProps {
 
 const BlogPostTemplate: FC<BlogPostTemplateProps> = ({ data, children }) => {
   const { mdx, previous, next } = data
-  const { title, date, description, tags } = mdx.frontmatter
+  const { title, date, description, tags } = mdx.fields
 
   return (
     <Layout>
@@ -184,7 +182,7 @@ const BlogPostTemplate: FC<BlogPostTemplateProps> = ({ data, children }) => {
                     rel="prev"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition-colors"
                   >
-                    ← {previous.frontmatter.title}
+                    ← {previous.fields.title}
                   </Link>
                 )}
               </li>
@@ -195,7 +193,7 @@ const BlogPostTemplate: FC<BlogPostTemplateProps> = ({ data, children }) => {
                     rel="next"
                     className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition-colors"
                   >
-                    {next.frontmatter.title} →
+                    {next.fields.title} →
                   </Link>
                 )}
               </li>
@@ -216,26 +214,24 @@ export const pageQuery = graphql`
     mdx(id: { eq: $id }) {
       id
       tableOfContents
-      frontmatter {
+      fields {
         title
         date(formatString: "MMMM DD, YYYY")
         description
         tags
+        author
+        featured
       }
     }
     previous: mdx(id: { eq: $previousPostId }) {
       fields {
         slug
-      }
-      frontmatter {
         title
       }
     }
     next: mdx(id: { eq: $nextPostId }) {
       fields {
         slug
-      }
-      frontmatter {
         title
       }
     }

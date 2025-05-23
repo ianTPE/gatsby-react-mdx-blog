@@ -1,5 +1,6 @@
 const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
+const { posts } = require('./content/metadata.ts')
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
@@ -11,11 +12,27 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       ? `${fileNode.relativeDirectory}`
       : fileNode.name
     
+    // Create the basic slug field
     createNodeField({
       name: 'slug',
       node,
       value: `/posts/${fileName}`
     })
+    
+    // Find corresponding post in metadata
+    const slugFromPath = fileName.split('/').pop()
+    const metadataForFile = posts.find(post => post.slug === slugFromPath)
+    
+    if (metadataForFile) {
+      // Add all metadata fields from metadata.js
+      Object.entries(metadataForFile).forEach(([key, value]) => {
+        createNodeField({
+          name: key,
+          node,
+          value,
+        })
+      })
+    }
   }
 }
 
@@ -26,11 +43,17 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 
   const result = await graphql(`
     query {
-      allMdx(sort: { frontmatter: { date: DESC } }, limit: 1000) {
+      allMdx(sort: { fields: { date: DESC } }, limit: 1000) {
         nodes {
           id
           fields {
             slug
+            title
+            date
+            description
+            tags
+            author
+            featured
           }
           internal {
             contentFilePath
@@ -70,16 +93,16 @@ exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
   createTypes(`
     type Mdx implements Node {
-      frontmatter: Frontmatter
       fields: Fields
     }
-    type Frontmatter {
+    type Fields {
+      slug: String
       title: String
       description: String
       date: Date @dateformat
       tags: [String]
-    }
-    type Fields {
+      author: String
+      featured: Boolean
       slug: String
     }
   `)
