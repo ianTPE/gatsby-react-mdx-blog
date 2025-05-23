@@ -12,14 +12,10 @@ interface IndexPageProps {
         excerpt: string
         fields: {
           slug: string
-        }
-        fields: {
           title: string
           date: string
           description?: string
           tags?: string[]
-          author?: string
-          featured?: boolean
         }
       }>
     }
@@ -132,18 +128,16 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
 
 export const pageQuery = graphql`
   query {
-    allMdx(sort: { fields: { date: DESC } }) {
+    allMdx(sort: {fields: {date: DESC}}) {
       nodes {
         id
         excerpt(pruneLength: 160)
         fields {
           slug
           title
-          date
+          date(formatString: "MMMM DD, YYYY")
           description
           tags
-          author
-          featured
         }
       }
     }

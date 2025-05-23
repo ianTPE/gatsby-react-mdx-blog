@@ -60,12 +60,6 @@ const DoughnutChartDemo = () => <ChartComponentLoader componentName="DoughnutCha
 interface BlogPostTemplateProps {
   data: {
     mdx: {
-      frontmatter: {
-        title: string
-        date: string
-        description?: string
-        tags?: string[]
-      }
       tableOfContents?: {
         items?: Array<{
           url: string
@@ -79,16 +73,12 @@ interface BlogPostTemplateProps {
     previous?: {
       fields: {
         slug: string
-      }
-      frontmatter: {
         title: string
       }
     }
     next?: {
       fields: {
         slug: string
-      }
-      frontmatter: {
         title: string
       }
     }
@@ -97,12 +87,20 @@ interface BlogPostTemplateProps {
   pageContext: {
     id: string
     slug: string
+    metadata: {
+      title: string
+      date: string
+      description?: string
+      tags?: string[]
+      author?: string
+    }
   }
 }
 
 const BlogPostTemplate: React.FC<BlogPostTemplateProps> = ({ data, children, pageContext }) => {
   const { mdx, previous, next } = data
-  const { title, date, description, tags } = mdx.frontmatter
+  const { metadata } = pageContext
+  const { title, date, description, tags } = metadata
   const slug = pageContext.slug || mdx.fields.slug
 
   // Define local components for each post
@@ -143,7 +141,13 @@ const BlogPostTemplate: React.FC<BlogPostTemplateProps> = ({ data, children, pag
             {title}
           </h1>
           <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-            <time dateTime={date}>{date}</time>
+            <time dateTime={date}>
+              {new Date(date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </time>
             {tags && tags.length > 0 && (
               <div className="flex gap-2">
                 {tags.map((tag) => (
@@ -211,7 +215,7 @@ const BlogPostTemplate: React.FC<BlogPostTemplateProps> = ({ data, children, pag
                   rel="prev"
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition-colors"
                 >
-                  ← {previous.frontmatter.title}
+                  ← {previous.fields.title}
                 </Link>
               )}
             </li>
@@ -222,7 +226,7 @@ const BlogPostTemplate: React.FC<BlogPostTemplateProps> = ({ data, children, pag
                   rel="next"
                   className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-600 transition-colors"
                 >
-                  {next.frontmatter.title} →
+                  {next.fields.title} →
                 </Link>
               )}
             </li>
@@ -245,26 +249,16 @@ export const pageQuery = graphql`
       fields {
         slug
       }
-      frontmatter {
-        title
-        date(formatString: "MMMM DD, YYYY")
-        description
-        tags
-      }
     }
     previous: mdx(id: { eq: $previousPostId }) {
       fields {
         slug
-      }
-      frontmatter {
         title
       }
     }
     next: mdx(id: { eq: $nextPostId }) {
       fields {
         slug
-      }
-      frontmatter {
         title
       }
     }

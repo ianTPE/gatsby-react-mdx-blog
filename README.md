@@ -2,9 +2,20 @@
 
 A modern, performant blog built with Gatsby, React, TypeScript, and MDX. Features interactive components, beautiful styling with Tailwind CSS, and smooth animations with Framer Motion.
 
+## Recent Updates
+
+### Fixed Build Issues (May 23, 2025)
+- ✅ Fixed GraphQL sort syntax for Gatsby v5
+- ✅ Fixed chart components loading with dynamic imports
+- ✅ Added SSR protection for Chart.js components
+- ✅ Created icon.png placeholder for build requirements
+- ✅ Updated all dependencies to compatible versions
+- ✅ Implemented no-frontmatter approach with centralized metadata
+
 ## Features
 
 - 📝 **MDX Support** - Write content in Markdown with embedded React components
+- 🎯 **No Frontmatter** - Clean MDX files with centralized metadata management
 - 🎨 **Tailwind CSS** - Modern utility-first styling with v3.4
 - 🚀 **TypeScript** - Full type safety throughout the project
 - ✨ **Framer Motion** - Smooth animations and transitions
@@ -14,6 +25,34 @@ A modern, performant blog built with Gatsby, React, TypeScript, and MDX. Feature
 - 🌙 **Dark Mode Ready** - Support for light and dark themes
 - ⚡ **Fast Performance** - Static site generation with Gatsby
 - 📱 **Fully Responsive** - Mobile-first design approach
+
+## Quick Start
+
+```bash
+# Clone the repository
+git clone <your-repo-url>
+cd gatsby-react-mdx-blog
+
+# Install dependencies
+npm install
+
+# Generate icon (Windows)
+node -e "require('fs').writeFileSync('src/images/icon.png', Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64'))"
+
+# Start development server
+npm run develop
+```
+
+Your site will be available at `http://localhost:8000`
+
+## Key Architecture Decision: No Frontmatter
+
+This blog uses a **centralized metadata** approach:
+- All post metadata is stored in `content/metadata.js`
+- MDX files contain only content (no frontmatter)
+- Cleaner files, better performance, easier management
+
+See `WHY_NO_FRONTMATTER.md` for details.
 
 ## Getting Started
 
@@ -103,19 +142,14 @@ mkdir content/posts/my-new-post
 Create `content/posts/my-new-post/content.mdx`:
 
 ```mdx
----
-title: "My Amazing New Post"
-date: "2024-01-25"
-description: "A brief description of your post"
-tags: ["tutorial", "react"]
----
-
 Your content goes here...
 
 <AlertBox type="info">
   You can use React components directly!
 </AlertBox>
 ```
+
+Note: No frontmatter needed! All metadata is centralized in `metadata.js`.
 
 ### 4. Add local components (optional)
 
@@ -252,9 +286,12 @@ When adding local components to a new blog post:
 
 ### Common Issues
 
-1. **Icon missing error**: Add a `icon.png` file to `src/images/`
+1. **Icon missing error**: 
+   - Run `node -e "require('fs').writeFileSync('src/images/icon.png', Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64'))"`
+   - Or use the icon-generator.html file
 2. **Build errors**: Run `npm run clean` then rebuild
 3. **Type errors**: Run `npm run typecheck` to identify issues
+4. **GraphQL errors**: Fixed! Was using wrong sort syntax for Gatsby v5
 
 ## Contributing
 

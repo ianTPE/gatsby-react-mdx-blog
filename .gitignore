@@ -149,3 +149,7 @@ public/
 
 # Icon generator helper
 icon-generator.html
+
+# Build test scripts
+test-build.sh
+test-build.bat
