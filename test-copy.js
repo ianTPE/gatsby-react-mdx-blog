@@ -14,13 +14,21 @@ async function copyComponents() {
     fs.mkdirSync(generatedComponentsDir, { recursive: true });
   }
 
-  // Clear the generated directory first to avoid stale files
+  // Clean the generated directory first to avoid stale files
   console.log('Cleaning generated components directory...');
-  const existingFiles = fs.readdirSync(generatedComponentsDir);
-  for (const file of existingFiles) {
-    const filePath = path.join(generatedComponentsDir, file);
-    fs.unlinkSync(filePath);
-    console.log(`Removed old file: ${filePath}`);
+  if (fs.existsSync(generatedComponentsDir)) {
+    const existingFiles = fs.readdirSync(generatedComponentsDir);
+    for (const file of existingFiles) {
+      const filePath = path.join(generatedComponentsDir, file);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log(`Removed old file: ${filePath}`);
+      }
+    }
+  } else {
+    // Create the directory if it doesn't exist
+    fs.mkdirSync(generatedComponentsDir, { recursive: true });
+    console.log(`Created directory: ${generatedComponentsDir}`);
   }
 
   // Check if source directory exists
