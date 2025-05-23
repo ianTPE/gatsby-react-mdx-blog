@@ -53,16 +53,54 @@ const defaultComponents: MDXComponentsType = {
 // Try to import chart components, but fall back to defaults if they don't exist
 let components = defaultComponents
 
+// Helper function to safely import components
+const safeRequire = (path: string, componentName: string) => {
+  try {
+    return require(path).default
+  } catch (e) {
+    console.warn(`Failed to load component: ${componentName} from ${path}`)
+    return null
+  }
+}
+
+// Define component props interface
+interface ChartComponentProps {
+  [key: string]: unknown
+}
+
+// Load chart components
+const ChartComponents: Record<string, React.ComponentType<ChartComponentProps>> = {}
+
+// Import chart components from the generated components directory
 try {
-  // @ts-ignore - Dynamic import that might not exist
-  const ChartComponents = require("content/posts/react-charts-guide/components").default || {}
-  // If we get here, the import worked - merge the components
+  const { 
+    SalesChart,
+    BarChartDemo,
+    PieChartDemo,
+    DoughnutChartDemo
+  } = require('../../generated/components') as {
+    SalesChart: React.ComponentType<ChartComponentProps>,
+    BarChartDemo: React.ComponentType<ChartComponentProps>,
+    PieChartDemo: React.ComponentType<ChartComponentProps>,
+    DoughnutChartDemo: React.ComponentType<ChartComponentProps>
+  }
+
+  if (SalesChart) ChartComponents.SalesChart = SalesChart
+  if (BarChartDemo) ChartComponents.BarChartDemo = BarChartDemo
+  if (PieChartDemo) ChartComponents.PieChartDemo = PieChartDemo
+  if (DoughnutChartDemo) ChartComponents.DoughnutChartDemo = DoughnutChartDemo
+  
+  console.log('Successfully loaded chart components:', Object.keys(ChartComponents))
+} catch (e) {
+  console.error('Failed to load chart components:', e)
+}
+
+// Merge components if any were loaded successfully
+if (Object.keys(ChartComponents).length > 0) {
   components = {
     ...defaultComponents,
     ...ChartComponents
   } as MDXComponentsType
-} catch (e) {
-  console.warn("Chart components not found, using fallback components")
 }
 
 interface BlogPostTemplateProps {
