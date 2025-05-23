@@ -13,11 +13,13 @@ interface IndexPageProps {
         fields: {
           slug: string
         }
-        frontmatter: {
+        fields: {
           title: string
           date: string
           description?: string
           tags?: string[]
+          author?: string
+          featured?: boolean
         }
       }>
     }
@@ -60,16 +62,20 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
                     to={post.fields.slug}
                     className="text-gray-900 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                   >
-                    {post.frontmatter.title}
+                    {post.fields.title}
                   </Link>
                 </h2>
                 <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-                  <time dateTime={post.frontmatter.date}>
-                    {post.frontmatter.date}
+                  <time dateTime={post.fields.date}>
+                    {new Date(post.fields.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
                   </time>
-                  {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+                  {post.fields.tags && post.fields.tags.length > 0 && (
                     <div className="flex gap-2">
-                      {post.frontmatter.tags.map((tag) => (
+                      {post.fields.tags.map((tag) => (
                         <span
                           key={tag}
                           className="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded text-xs"
@@ -82,7 +88,7 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
                 </div>
               </header>
               <p className="text-gray-700 dark:text-gray-300 mb-4">
-                {post.frontmatter.description || post.excerpt}
+                {post.fields.description || post.excerpt}
               </p>
               <Link
                 to={post.fields.slug}
@@ -126,18 +132,18 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
 
 export const pageQuery = graphql`
   query {
-    allMdx(sort: { frontmatter: { date: DESC } }) {
+    allMdx(sort: { fields: { date: DESC } }) {
       nodes {
         id
         excerpt(pruneLength: 160)
         fields {
           slug
-        }
-        frontmatter {
           title
-          date(formatString: "MMMM DD, YYYY")
+          date
           description
           tags
+          author
+          featured
         }
       }
     }
