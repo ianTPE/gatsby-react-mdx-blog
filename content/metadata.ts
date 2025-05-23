@@ -1,17 +1,19 @@
 // Central metadata for all blog posts
 // This file is used for performance optimization and external tooling
 
-export interface PostMetadata {
-  slug: string;
-  title: string;
-  date: string;
-  description: string;
-  tags: string[];
-  author: string;
-  featured: boolean;
-}
+/**
+ * @typedef {Object} PostMetadata
+ * @property {string} slug - Unique identifier for the post URL
+ * @property {string} title - Title of the post
+ * @property {string} date - Publication date (YYYY-MM-DD)
+ * @property {string} description - Brief description of the post
+ * @property {string[]} tags - Array of tag identifiers
+ * @property {string} author - Author name
+ * @property {boolean} featured - Whether this is a featured post
+ */
 
-export const posts: PostMetadata[] = [
+/** @type {PostMetadata[]} */
+const posts = [
   {
     slug: "hello-world",
     title: "Hello World: Getting Started with MDX",
@@ -43,11 +45,29 @@ export const posts: PostMetadata[] = [
 ];
 
 // Helper functions
-export const getPostBySlug = (slug: string): PostMetadata | undefined => 
-  posts.find(post => post.slug === slug);
+/**
+ * Find a post by its slug
+ * @param {string} slug - The slug to look for
+ * @returns {PostMetadata|undefined} The post or undefined if not found
+ */
+const getPostBySlug = (slug) => posts.find(post => post.slug === slug);
 
-export const getFeaturedPosts = (): PostMetadata[] => 
-  posts.filter(post => post.featured);
+/**
+ * Get all featured posts
+ * @returns {PostMetadata[]} Array of featured posts
+ */
+const getFeaturedPosts = () => posts.filter(post => post.featured);
 
-export const getPostsByTag = (tag: string): PostMetadata[] => 
-  posts.filter(post => post.tags.includes(tag));
+/**
+ * Get all posts with a specific tag
+ * @param {string} tag - The tag to filter by
+ * @returns {PostMetadata[]} Array of posts with the tag
+ */
+const getPostsByTag = (tag) => posts.filter(post => post.tags.includes(tag));
+
+module.exports = {
+  posts,
+  getPostBySlug,
+  getFeaturedPosts,
+  getPostsByTag
+};

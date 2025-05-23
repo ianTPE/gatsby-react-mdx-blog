@@ -1,5 +1,6 @@
 const path = require('path')
 const { createFilePath } = require('gatsby-source-filesystem')
+// Use TypeScript file with CommonJS syntax
 const { posts } = require('./content/metadata.ts')
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
