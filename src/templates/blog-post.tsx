@@ -6,12 +6,20 @@ import { motion } from "framer-motion"
 import Layout from "../components/Layout"
 import SEO from "../components/SEO"
 import MDXComponents from "../components/mdx/MDXComponents"
-import * as ChartComponents from "content/posts/react-charts-guide/components"
+// Try to import chart components, but make it optional
+let ChartComponents = {}
+
+try {
+  // @ts-ignore - Dynamic import that might not exist
+  ChartComponents = require("content/posts/react-charts-guide/components").default || {}
+} catch (e) {
+  console.warn("Chart components not found, proceeding without them")
+}
 
 // Merge MDX components with chart components
 const components: MDXComponentsType = {
   ...MDXComponents,
-  ...ChartComponents
+  ...(ChartComponents || {})
 } as MDXComponentsType
 
 interface BlogPostTemplateProps {
