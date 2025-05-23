@@ -221,6 +221,33 @@ This site can be deployed to any static hosting service:
 - **GitHub Pages**: Use `gatsby-plugin-gh-pages`
 - **AWS S3**: Build and upload to S3 bucket
 
+### 📊 Chart Components Issue Fixed
+
+The chart components issue has been resolved! The problem was:
+1. Local MDX components weren't being loaded properly in the blog post template
+2. Chart.js has SSR (Server-Side Rendering) compatibility issues
+
+**Solutions implemented:**
+1. Added dynamic imports for chart components using React's lazy loading
+2. Added browser environment checks to prevent SSR errors
+3. Components now load only in the browser with loading states
+
+### 🔧 Adding Local Components to New Posts
+
+When adding local components to a new blog post:
+
+1. Create components in `content/posts/[slug]/components/`
+2. Update `src/templates/blog-post.tsx` to include the new components:
+   ```typescript
+   case '/posts/your-new-post/':
+     return {
+       YourComponent1,
+       YourComponent2,
+     }
+   ```
+3. Add dynamic imports in the `ChartComponentLoader` switch statement
+4. Create wrapper components for each local component
+
 ## Troubleshooting
 
 ### Common Issues

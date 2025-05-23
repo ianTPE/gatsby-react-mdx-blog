@@ -22,6 +22,10 @@ ChartJS.register(
 )
 
 const SalesChart: React.FC = () => {
+  // Check if we're in the browser
+  if (typeof window === 'undefined') {
+    return <div className="my-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md" style={{ height: '400px' }}>Loading chart...</div>
+  }
   const data = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [

@@ -10,6 +10,10 @@ import { Pie } from 'react-chartjs-2'
 ChartJS.register(ArcElement, Tooltip, Legend)
 
 const PieChartDemo: React.FC = () => {
+  // Check if we're in the browser
+  if (typeof window === 'undefined') {
+    return <div className="my-8 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md" style={{ height: '350px' }}>Loading chart...</div>
+  }
   const data = {
     labels: ['Desktop', 'Mobile', 'Tablet', 'Other'],
     datasets: [
