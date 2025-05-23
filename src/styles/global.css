@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased;
+  }
+}
+
+@layer components {
+  /* Custom prose overrides handled by MDX components */
+}
+
+/* Code block styles */
+.code-highlight {
+  @apply mb-8 rounded-lg overflow-hidden;
+}
+
+.code-highlight-line {
+  @apply block bg-gray-800 -mx-4 px-4;
+}
+
+/* Chart container styles */
+.chart-container {
+  @apply relative w-full;
+}
+
+/* Framer Motion defaults */
+.motion-safe {
+  @apply transition-all duration-300 ease-in-out;
+}

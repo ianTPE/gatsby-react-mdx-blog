@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Production
+public/
+.cache/
+
+# Misc
+.DS_Store
+*.log
+.env*
+
+# Generated files
+package-lock.json
+yarn.lock

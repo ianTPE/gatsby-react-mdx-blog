@@ -1,0 +1,190 @@
+---
+title: "Building Interactive Charts with React and Chart.js"
+date: "2024-01-20"
+description: "Learn how to create responsive, interactive charts in your MDX blog posts using Chart.js and React."
+tags: ["react", "charts", "data-visualization", "tutorial"]
+---
+
+Data visualization is a crucial part of modern web development. In this post, we'll explore how to create beautiful, interactive charts using React and Chart.js in your MDX blog posts.
+
+## Why Chart.js?
+
+Chart.js is a popular, lightweight charting library that offers:
+
+- Simple API
+- Responsive design
+- Multiple chart types
+- Excellent performance
+- Great customization options
+
+<AlertBox type="info">
+  Chart.js works seamlessly with React through the react-chartjs-2 wrapper.
+</AlertBox>
+
+## Setting Up Chart.js
+
+First, install the necessary dependencies:
+
+```bash
+npm install chart.js react-chartjs-2
+```
+
+## Creating Your First Chart
+
+Here's a simple example of a line chart component:
+
+```jsx title="LineChart.jsx"
+import React from 'react'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js'
+import { Line } from 'react-chartjs-2'
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+)
+
+const LineChart = () => {
+  const data = {
+    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+    datasets: [
+      {
+        label: 'Sales 2024',
+        data: [12, 19, 3, 5, 2, 3],
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+      },
+    ],
+  }
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Monthly Sales Data',
+      },
+    },
+  }
+
+  return <Line data={data} options={options} />
+}
+
+export default LineChart
+```
+
+## Live Example
+
+<SalesChart />
+
+## Responsive Design Considerations
+
+When creating charts for MDX content, consider these best practices:
+
+### Container Setup
+
+```jsx
+<div className="p-4 pb-8 bg-white rounded-lg shadow-md 
+                min-h-[300px] max-h-[350px] 
+                sm:min-h-[350px] sm:max-h-[400px] 
+                lg:min-h-[400px] lg:max-h-[500px]">
+  <Chart />
+</div>
+```
+
+### Dynamic Aspect Ratio
+
+```javascript
+const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 640
+
+const options = {
+  maintainAspectRatio: isDesktop, // true for desktop, false for mobile
+  // ... other options
+}
+```
+
+## Different Chart Types
+
+Chart.js supports various chart types:
+
+### Bar Chart
+
+<BarChartDemo />
+
+### Pie Chart
+
+<PieChartDemo />
+
+### Doughnut Chart
+
+<DoughnutChartDemo />
+
+## Advanced Features
+
+<AlertBox type="success">
+  Chart.js supports animations, custom tooltips, and interactive legends!
+</AlertBox>
+
+### Custom Tooltips
+
+```javascript
+options: {
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function(context) {
+          let label = context.dataset.label || '';
+          if (label) {
+            label += ': ';
+          }
+          if (context.parsed.y !== null) {
+            label += new Intl.NumberFormat('en-US', { 
+              style: 'currency', 
+              currency: 'USD' 
+            }).format(context.parsed.y);
+          }
+          return label;
+        }
+      }
+    }
+  }
+}
+```
+
+## Performance Tips
+
+1. **Lazy Loading**: Load charts only when they're in viewport
+2. **Data Optimization**: Limit data points for better performance
+3. **Responsive Sizing**: Use percentage-based sizing
+4. **Canvas Rendering**: Chart.js uses canvas for optimal performance
+
+## Conclusion
+
+Chart.js with React provides a powerful combination for creating interactive data visualizations in your MDX blog. The key is to focus on:
+
+- Responsive design
+- Performance optimization
+- User experience
+- Accessibility
+
+<AlertBox type="info">
+  Remember to test your charts across different devices and screen sizes!
+</AlertBox>
+
+Happy charting! 📊

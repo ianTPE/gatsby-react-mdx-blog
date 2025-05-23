@@ -1,0 +1,321 @@
+---
+title: "Code Syntax Highlighting Showcase"
+date: "2024-01-25"
+description: "Explore the beautiful syntax highlighting capabilities powered by prism-react-renderer in this MDX blog."
+tags: ["code", "syntax-highlighting", "mdx", "developer-tools"]
+---
+
+Welcome to our syntax highlighting showcase! This blog uses **prism-react-renderer** to provide beautiful, performant code highlighting with React integration.
+
+## Features at a Glance
+
+<AlertBox type="info">
+  Our code blocks support multiple languages, line numbers, line highlighting, titles, and one-click copying!
+</AlertBox>
+
+## JavaScript & TypeScript
+
+### Basic JavaScript
+
+```javascript
+// A simple function with ES6 features
+const greetUser = (name = 'World') => {
+  console.log(`Hello, ${name}!`);
+  return { 
+    message: `Welcome, ${name}`, 
+    timestamp: new Date().toISOString() 
+  };
+};
+
+// Array methods and destructuring
+const numbers = [1, 2, 3, 4, 5];
+const [first, ...rest] = numbers;
+const doubled = numbers.map(n => n * 2);
+```
+
+### TypeScript with Types
+
+```typescript title="types/user.ts"
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  roles: Role[];
+  createdAt: Date;
+}
+
+enum Role {
+  Admin = 'ADMIN',
+  User = 'USER',
+  Guest = 'GUEST'
+}
+
+class UserService {
+  private users: Map<string, User> = new Map();
+
+  async getUser(id: string): Promise<User | null> {
+    return this.users.get(id) || null;
+  }
+
+  async createUser(data: Omit<User, 'id' | 'createdAt'>): Promise<User> {
+    const user: User = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: new Date()
+    };
+    this.users.set(user.id, user);
+    return user;
+  }
+}
+```
+
+## React & JSX
+
+### React Component
+
+```jsx title="components/Button.jsx" showLineNumbers
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+
+const Button = ({ children, onClick, variant = 'primary' }) => {
+  const [isClicked, setIsClicked] = useState(false);
+
+  const handleClick = (e) => {
+    setIsClicked(true);
+    onClick?.(e);
+    setTimeout(() => setIsClicked(false), 300);
+  };
+
+  const variants = {
+    primary: 'bg-blue-600 hover:bg-blue-700 text-white',
+    secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
+    danger: 'bg-red-600 hover:bg-red-700 text-white'
+  };
+
+  return (
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className={`px-4 py-2 rounded-lg font-medium transition-all ${variants[variant]}`}
+      onClick={handleClick}
+    >
+      {isClicked && '✨'} {children}
+    </motion.button>
+  );
+};
+
+export default Button;
+```
+
+## Python
+
+```python title="data_analysis.py"
+import pandas as pd
+import numpy as np
+from typing import List, Dict, Optional
+
+class DataAnalyzer:
+    """A class for analyzing sales data."""
+    
+    def __init__(self, data_path: str):
+        self.data = pd.read_csv(data_path)
+        self.processed = False
+    
+    def preprocess(self) -> None:
+        """Clean and prepare the data for analysis."""
+        # Remove duplicates
+        self.data.drop_duplicates(inplace=True)
+        
+        # Handle missing values
+        self.data.fillna({
+            'quantity': 0,
+            'price': self.data['price'].mean()
+        }, inplace=True)
+        
+        # Convert date columns
+        self.data['date'] = pd.to_datetime(self.data['date'])
+        self.processed = True
+    
+    def get_summary_stats(self) -> Dict[str, float]:
+        """Calculate summary statistics."""
+        if not self.processed:
+            self.preprocess()
+        
+        return {
+            'total_revenue': self.data['revenue'].sum(),
+            'average_order': self.data['revenue'].mean(),
+            'total_orders': len(self.data),
+            'unique_customers': self.data['customer_id'].nunique()
+        }
+
+# Usage example
+analyzer = DataAnalyzer('sales_data.csv')
+stats = analyzer.get_summary_stats()
+print(f"Total Revenue: ${stats['total_revenue']:,.2f}")
+```
+
+## CSS & Styling
+
+### Modern CSS
+
+```css title="styles/components.css"
+/* Modern CSS with custom properties and grid */
+:root {
+  --color-primary: #3b82f6;
+  --color-secondary: #10b981;
+  --spacing-unit: 0.25rem;
+  --radius-default: 0.5rem;
+}
+
+.card {
+  display: grid;
+  gap: calc(var(--spacing-unit) * 4);
+  padding: calc(var(--spacing-unit) * 6);
+  background: white;
+  border-radius: var(--radius-default);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: calc(var(--spacing-unit) * 6);
+  }
+}
+```
+
+## SQL Queries
+
+```sql title="analytics_queries.sql"
+-- Get top customers by revenue
+WITH customer_revenue AS (
+  SELECT 
+    c.customer_id,
+    c.name,
+    c.email,
+    SUM(o.total_amount) as total_revenue,
+    COUNT(DISTINCT o.order_id) as order_count,
+    AVG(o.total_amount) as avg_order_value
+  FROM customers c
+  JOIN orders o ON c.customer_id = o.customer_id
+  WHERE o.status = 'completed'
+    AND o.created_at >= DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR)
+  GROUP BY c.customer_id, c.name, c.email
+)
+SELECT 
+  customer_id,
+  name,
+  email,
+  total_revenue,
+  order_count,
+  ROUND(avg_order_value, 2) as avg_order_value,
+  RANK() OVER (ORDER BY total_revenue DESC) as revenue_rank
+FROM customer_revenue
+ORDER BY total_revenue DESC
+LIMIT 10;
+```
+
+## Shell Scripts
+
+```bash title="deploy.sh"
+#!/bin/bash
+
+# Deployment script for the blog
+set -e
+
+echo "🚀 Starting deployment process..."
+
+# Build the project
+echo "📦 Building the project..."
+npm run clean
+npm run build
+
+# Run tests
+echo "🧪 Running tests..."
+npm test
+
+# Check if build was successful
+if [ -d "public" ]; then
+  echo "✅ Build successful!"
+else
+  echo "❌ Build failed!"
+  exit 1
+fi
+
+# Deploy to hosting service
+echo "☁️  Deploying to production..."
+netlify deploy --prod --dir=public
+
+echo "🎉 Deployment complete!"
+```
+
+## JSON & Configuration
+
+```json title="package.json" highlightLines={[5, 10, 11, 12]}
+{
+  "name": "gatsby-mdx-blog",
+  "version": "1.0.0",
+  "description": "A modern blog with MDX and syntax highlighting",
+  "scripts": {
+    "develop": "gatsby develop",
+    "build": "gatsby build",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,mdx}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "gatsby": "^5.13.1",
+    "react": "^18.2.0",
+    "prism-react-renderer": "^2.3.0"
+  }
+}
+```
+
+## Advanced Features
+
+### Line Highlighting
+
+<AlertBox type="success">
+  Notice how specific lines are highlighted in the JSON example above? You can highlight important lines to draw attention!
+</AlertBox>
+
+### Inline Code
+
+Don't forget about inline code! You can write `const variable = "value"` or mention function names like `useState()` right in your text. Even file paths like `/src/components/Header.tsx` look great.
+
+## Theme Customization
+
+Our code blocks use the **Night Owl** theme by default, providing excellent contrast and readability in both light and dark modes. The theme includes:
+
+- Carefully chosen colors for different token types
+- Optimal contrast ratios for accessibility
+- Smooth transitions between light and dark modes
+- Consistent styling across all supported languages
+
+## Performance Benefits
+
+Using `prism-react-renderer` provides several advantages:
+
+1. **React Integration**: Seamless integration with React's rendering lifecycle
+2. **Bundle Size**: Smaller bundle size compared to traditional Prism.js
+3. **Customization**: Easy to customize themes and add features
+4. **Type Safety**: Full TypeScript support out of the box
+
+## Conclusion
+
+Beautiful code highlighting enhances the reading experience and makes technical content more accessible. With `prism-react-renderer`, we get the best of both worlds: the power of Prism.js with the flexibility of React.
+
+<AlertBox type="info">
+  Try copying any code block above with the copy button that appears on hover!
+</AlertBox>
+
+Happy coding! 🚀

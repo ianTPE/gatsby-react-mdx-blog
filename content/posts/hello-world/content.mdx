@@ -1,0 +1,93 @@
+---
+title: "Hello World: Getting Started with MDX"
+date: "2024-01-15"
+description: "An introduction to building a blog with Gatsby and MDX, featuring interactive components and modern web development practices."
+tags: ["gatsby", "mdx", "react", "tutorial"]
+---
+
+Welcome to my new blog built with Gatsby and MDX! This post demonstrates the power of MDX - a format that lets you write JSX directly in your Markdown files.
+
+## What is MDX?
+
+MDX is a format that combines the simplicity of Markdown with the power of React components. This means you can:
+
+- Write content in Markdown
+- Import and use React components
+- Create interactive experiences
+- Maintain clean, readable content
+
+<AlertBox type="info">
+  MDX files have a `.mdx` extension and can contain both Markdown and JSX.
+</AlertBox>
+
+## Code Examples
+
+Here's how you can create a simple React component:
+
+```jsx title="MyComponent.jsx"
+import React from 'react'
+
+const MyComponent = ({ name }) => {
+  return (
+    <div className="p-4 bg-blue-100 rounded">
+      <h3>Hello, {name}!</h3>
+    </div>
+  )
+}
+
+export default MyComponent
+```
+
+## Features of This Blog
+
+This blog setup includes:
+
+1. **TypeScript Support** - Full type safety across the project
+2. **Tailwind CSS** - Utility-first CSS framework
+3. **Framer Motion** - Smooth animations
+4. **Syntax Highlighting** - Beautiful code blocks with Prism.js
+5. **SEO Optimization** - Built-in SEO component
+6. **Dark Mode Ready** - Supports light and dark themes
+
+## Interactive Components
+
+<AlertBox type="success">
+  You can use interactive components directly in your MDX files!
+</AlertBox>
+
+<AlertBox type="warning">
+  Remember to follow the component structure outlined in the project documentation.
+</AlertBox>
+
+## Project Structure
+
+The blog follows a clear structure:
+
+```
+/content
+  /posts
+    /hello-world
+      content.mdx        # This file
+      /components       # Post-specific components
+        index.ts       # Barrel file
+```
+
+## What's Next?
+
+In future posts, I'll cover:
+
+- Creating custom MDX components
+- Adding data visualizations with Chart.js
+- Implementing advanced animations
+- Optimizing for performance
+- SEO best practices
+
+Stay tuned for more content!
+
+## Conclusion
+
+MDX provides an excellent way to create rich, interactive content while maintaining the simplicity of Markdown. This blog will serve as both a platform for sharing knowledge and a showcase of what's possible with modern web technologies.
+
+<AlertBox type="info">
+  Feel free to explore the source code and use it as a starting point for your own MDX-powered blog!
+</AlertBox>

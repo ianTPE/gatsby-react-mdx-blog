@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Production
+public/
+.cache/
+
+# Config files
+gatsby-config.js
+gatsby-node.js
+gatsby-browser.js
+gatsby-ssr.js
+.eslintrc.js
+
+# Generated files
+*.d.ts
