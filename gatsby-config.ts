@@ -3,7 +3,9 @@ import type { GatsbyConfig } from "gatsby";
 const config: GatsbyConfig = {
   siteMetadata: {
     title: 'Epidote.top',
-    siteUrl: 'https://www.yourdomain.tld'
+    siteUrl: 'https://epidote.top',
+    description: 'A blog built with Gatsby and MDX',
+    author: 'Ian Chou'
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin
