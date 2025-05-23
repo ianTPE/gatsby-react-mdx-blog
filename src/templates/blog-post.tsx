@@ -43,6 +43,7 @@ const defaultComponents: MDXComponentsType = {
   // @ts-ignore - We know these might not match exactly but it's okay for the fallback
   ...MDXComponents,
   // Add default implementations for chart components
+  SalesChart: () => <MissingComponent name="SalesChart" />,
   BarChartDemo: () => <MissingComponent name="BarChartDemo" />,
   PieChartDemo: () => <MissingComponent name="PieChartDemo" />,
   DoughnutChartDemo: () => <MissingComponent name="DoughnutChartDemo" />,
