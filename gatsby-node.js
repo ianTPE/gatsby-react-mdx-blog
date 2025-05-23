@@ -5,11 +5,16 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === 'Mdx') {
-    const value = createFilePath({ node, getNode })
+    // Get the parent directory name to use in the URL
+    const fileNode = getNode(node.parent)
+    const fileName = fileNode.relativeDirectory
+      ? `${fileNode.relativeDirectory}`
+      : fileNode.name
+    
     createNodeField({
       name: 'slug',
       node,
-      value: `/posts${value}`,  // Keep this template literal as it uses interpolation
+      value: `/posts/${fileName}`
     })
   }
 }
