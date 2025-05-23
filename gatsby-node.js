@@ -98,13 +98,12 @@ exports.createSchemaCustomization = ({ actions }) => {
     }
     type Fields {
       slug: String
-      title: String
+      title: String!
+      date: Date! @dateformat
       description: String
-      date: Date @dateformat
-      tags: [String]
+      tags: [String!]
       author: String
       featured: Boolean
-      slug: String
     }
   `)
 }
