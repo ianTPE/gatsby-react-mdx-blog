@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from "react"
+import type { FC, ReactNode, ComponentType } from "react"
 import { graphql, Link } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
 import type { MDXComponents as MDXComponentsType } from "mdx/types"
@@ -6,21 +6,63 @@ import { motion } from "framer-motion"
 import Layout from "../components/Layout"
 import SEO from "../components/SEO"
 import MDXComponents from "../components/mdx/MDXComponents"
-// Try to import chart components, but make it optional
-let ChartComponents = {}
+
+// Define the AlertBoxProps type if not already defined
+interface AlertBoxProps {
+  variant?: 'info' | 'warning' | 'error' | 'success'
+  children: ReactNode
+}
+// Create a placeholder component for missing components
+const MissingComponent = ({ name }: { name: string }) => (
+  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 my-4">
+    <div className="flex">
+      <div className="flex-shrink-0">
+        <svg 
+          className="h-5 w-5 text-yellow-400" 
+          viewBox="0 0 20 20" 
+          fill="currentColor"
+          role="img"
+          aria-hidden="true"
+        >
+          <title>Warning Icon</title>
+          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+      </div>
+      <div className="ml-3">
+        <p className="text-sm text-yellow-700">
+          Component <code className="font-mono">{name}</code> is not available.
+          {name.includes('Chart') && ' Make sure to install and configure chart components.'}
+        </p>
+      </div>
+    </div>
+  </div>
+)
+
+// Default components that will be used if chart components are missing
+const defaultComponents: MDXComponentsType = {
+  // @ts-ignore - We know these might not match exactly but it's okay for the fallback
+  ...MDXComponents,
+  // Add default implementations for chart components
+  BarChartDemo: () => <MissingComponent name="BarChartDemo" />,
+  PieChartDemo: () => <MissingComponent name="PieChartDemo" />,
+  DoughnutChartDemo: () => <MissingComponent name="DoughnutChartDemo" />,
+  LineChartDemo: () => <MissingComponent name="LineChartDemo" />
+} as MDXComponentsType
+
+// Try to import chart components, but fall back to defaults if they don't exist
+let components = defaultComponents
 
 try {
   // @ts-ignore - Dynamic import that might not exist
-  ChartComponents = require("content/posts/react-charts-guide/components").default || {}
+  const ChartComponents = require("content/posts/react-charts-guide/components").default || {}
+  // If we get here, the import worked - merge the components
+  components = {
+    ...defaultComponents,
+    ...ChartComponents
+  } as MDXComponentsType
 } catch (e) {
-  console.warn("Chart components not found, proceeding without them")
+  console.warn("Chart components not found, using fallback components")
 }
-
-// Merge MDX components with chart components
-const components: MDXComponentsType = {
-  ...MDXComponents,
-  ...(ChartComponents || {})
-} as MDXComponentsType
 
 interface BlogPostTemplateProps {
   data: {
